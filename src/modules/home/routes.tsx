@@ -23,11 +23,11 @@ export default () => {
         <Route path='business-health' element={<React.Suspense fallback={<div>Loading...</div>}><HomeBusinessHealth /></React.Suspense>} ></Route> */}
         {/* <Route path='scf' element={<React.Suspense fallback={<div>Loading...</div>}><HomeSCF /></React.Suspense>} ></Route> */}
      
-        <Route path="common/*" element={<HomeCommon />} />
-        <Route path="scf/*" element={<HomeSCF />} />
-        <Route path="guarantee/*" element={<HomeGuarantee />} />
-        <Route path="lc/*" element={<HomeLC />} />
-        <Route path="business-health/*" element={<HomeBusinessHealth />} />
+        <Route path="/home/common/*" element={<HomeCommon />} />
+        <Route path="/home/scf/*" element={<HomeSCF />} />
+        <Route path="/home/guarantee/*" element={<HomeGuarantee />} />
+        <Route path="/home/lc/*" element={<HomeLC />} />
+        <Route path="/home/business-health/*" element={<HomeBusinessHealth />} />
       </Routes>
     </div>
   );

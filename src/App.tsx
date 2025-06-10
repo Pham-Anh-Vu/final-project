@@ -26,10 +26,10 @@ function App() {
     <ReactKeycloakProvider
       authClient={keycloak}
       initOptions={{
-        onLoad: "login-required",
-        checkLoginIframe: false, // Disable the login status check via iframe
-        pkceMethod: "S256", // Use PKCE for enhanced security
-        flow: "standard", // Use standard flow
+        onLoad: "check-sso", // Kiểm tra SSO thay vì buộc đăng nhập
+        checkLoginIframe: false, // Vẫn giữ để tắt iframe check
+        pkceMethod: "S256", // Giữ PKCE cho bảo mật
+        flow: "standard", // Giữ flow chuẩn
       }}
     >
       <SecuredContent />

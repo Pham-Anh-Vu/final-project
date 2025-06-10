@@ -15,6 +15,7 @@ import { Menu, Button } from "antd";
 import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import React from "react";
+import keycloak from "../../../../keycloak";
 
 function Sidenav({ color }) {
   const { pathname } = useLocation();
@@ -244,7 +245,7 @@ function Sidenav({ color }) {
           </NavLink>
         </Menu.Item> */}
         <Menu.Item key="8">
-          <NavLink to="/sign-up">
+          <NavLink to="/home" onClick={() => {keycloak.logout()}}>
             <span className="icon">{signup}</span>
             <span className="label">Log Out</span>
           </NavLink>
