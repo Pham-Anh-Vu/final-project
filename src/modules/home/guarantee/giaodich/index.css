@@ -1,0 +1,16 @@
+.Transection {
+    .ImageStyle {
+        width: auto;
+        height: 90px;
+        padding: 1.25rem 0 0 1.25rem;
+    }
+
+    .TextStyle {
+        color: black;
+        
+        
+        font-weight: 400;
+        padding: 0 20px 0 20px;
+        text-align: justify
+    }
+}

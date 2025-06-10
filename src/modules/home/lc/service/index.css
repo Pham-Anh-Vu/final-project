@@ -1,0 +1,17 @@
+.BlockchainFunding {
+    .ImageStyle {
+        width: 69px;
+        height: 89px;
+        padding: 40px 0 0 20px;
+    }
+
+    .TextStyle {
+        color: black;
+        display: block; 
+        
+        
+        font-weight: 400;
+        padding: 0 20px 0 20px;
+        text-align: justify
+    }
+}

@@ -1,0 +1,239 @@
+.header {
+    position: fixed;
+    z-index: 999;
+    width: 100%;
+    padding-left: 0;
+    top: 0px;
+    background-color: rgb(47, 87, 250);
+    height: 3rem;
+    color: #fff;
+    padding-inline: 50;
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
+}
+
+/* .ant-menu-light .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover{
+    color: rgb(253, 199, 87);
+} */
+
+
+/* .headerMixWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+.headerMixWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+.headerMixWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after {
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+.headerMixWidth .ant-menu-light .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover {
+    color: rgb(253, 199, 87);
+}
+
+.headerMixWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+} */
+
+.headerMixWidth .ant-menu-light .ant-menu-item {
+    color: white
+}
+
+.headerMixWidth .ant-menu-light .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover{
+    color: white
+}
+
+/* .headerMixWidth .ant-menu-light.ant-menu-horizontal >.ant-menu-item:hover::after{
+    border-bottom-width: 2px;
+    border-bottom-color: rgb(47, 87, 250);
+} */
+
+/* .headerMixWidth .ant-menu-light.ant-menu-horizontal >.ant-menu-item-selected::after{
+    border-bottom-color: rgb(47, 87, 250);
+} */
+
+#headerMaxWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+#headerMaxWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+#headerMaxWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after {
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+#headerMaxWidth .ant-menu-light .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover {
+    color: rgb(253, 199, 87);
+}
+
+#headerMaxWidth .ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+#headerMaxWidth .ant-menu-light .ant-menu-item {
+    color: white
+}
+
+
+.header .ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+.header .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+.header .ant-menu-light.ant-menu-horizontal>.ant-menu-item-selected::after {
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+.header .ant-menu-light .ant-menu-item:not(.ant-menu-item-selected):not(.ant-menu-submenu-selected):hover {
+    color: rgb(253, 199, 87);
+}
+
+.header .ant-menu-light.ant-menu-horizontal>.ant-menu-item:hover::after {
+    color: rgb(253, 199, 87);
+    border-bottom-width: 3px;
+    border-bottom-color: rgb(253, 199, 87);
+}
+
+.header .ant-menu-light .ant-menu-item {
+    color: white
+}
+
+.header.hide {
+    top: -6rem;
+}
+
+.header.show {
+    top: 0;
+}
+
+#headerMaxWidth {
+    .headerMenuItem {
+        width: 110px;
+        line-height: 1.3;
+        font-size: 1em;
+        white-space: normal;
+        text-align: center;
+        padding: 10px;
+        border-radius: 5px;
+        -webkit-transition: color 0.3s;
+        transition: color 0.3s;
+    }
+
+    .headerMenuItem:hover {
+        color: rgb(253, 199, 87) !important;
+    }
+
+    .headerMenuItemMaxWidth {
+        height: 4rem;
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        width: 100%;
+        background: rgb(47, 87, 250);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+    }
+
+    .imageHeader {
+        display: flex;
+        justify-content: start;
+        background: rgb(47, 87, 250);
+    }
+
+    .gridMenuItem {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .customMenu {
+        display: flex;
+        justify-content: end;
+        padding: 0px;
+        background: rgb(47, 87, 250);
+    }
+
+    .customMenu .settingMenu {
+        padding: 0px;
+        background: rgb(47, 87, 250);
+    }
+
+    .customMenu .localeMenu {
+        /* min-width: 174px; */
+        padding: 0px;
+    }
+
+    .settingMenu .iconMenu{
+        .ant-menu-light.ant-menu-horizontal >.ant-menu-submenu {
+            border-bottom-width: 0px;
+            margin: auto;
+        }
+    }
+}
+
+.headerMixWidth {
+    background-color: rgb(47, 87, 250);
+    width: '100%';
+    padding: 0px;
+}
+
+.headerMixWidth .headerMenuItemMixWidth {
+    width: 100%;
+    height: 4rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgb(47, 87, 250);
+    color: #fff;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 5%;
+}
+
+
+.headerMixWidth .imageHeader {
+    background: rgb(47, 87, 250);
+    display: flex;
+    justify-content: center;
+    padding-left: 5%;
+}
+
+.ant-menu-light.ant-menu-horizontal >.ant-menu-submenu:hover::after{
+    border-bottom-width: 0px;
+}
+
+.ant-menu-light.ant-menu-horizontal >.ant-menu-submenu::after{
+    border-bottom-width: 0px;
+}
+
+.ant-menu-light.ant-menu-horizontal >.ant-menu-submenu{
+    border-bottom-width: 0px;
+}

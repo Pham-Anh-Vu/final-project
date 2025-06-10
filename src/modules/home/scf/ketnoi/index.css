@@ -1,0 +1,17 @@
+.Connection {
+    .ImageStyle {
+        width: 13%;
+        height: auto;
+        padding: 1.25rem 0 0 1.25rem;
+    }
+
+    .TextStyle {
+        color: black;
+        display: block; 
+        
+        
+        font-weight: 400;
+        padding: 0 20px 0 20px;
+        text-align: justify
+    }
+}
