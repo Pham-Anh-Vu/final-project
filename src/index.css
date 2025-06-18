@@ -1,13 +1,34 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend&display=swap');
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: '1.6em';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  /* font-family: "Roboto", sans-serif; */
+  font-family: "Lexend", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: '1.6em';
+}
+
+.ant-card-type-inner .ant-card-head {
+  padding: 0 24px;
+  background: rgb(245 245 245);
+}
+
+
+.ant-btn {
+  font-size: 16px;
+  line-height: 1.5;
+  height: 32px;
+  padding: 3px 24px;
+  border-radius: 6px;
 }

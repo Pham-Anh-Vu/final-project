@@ -3,12 +3,13 @@ import {  Button, Image, Row, Col, Typography } from 'antd';
 import { useTransition, animated, config } from '@react-spring/web';
 import { Link } from 'react-router-dom';
 import useIsMobile from '../../../../hooks/use-is-mobile';
-import useAuthStatus from '../../../../hooks/use-is-authenticated';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/hooks';
 const { Text, Title } = Typography;
 
 const Introduction = ({ display }: any) => {
     const isMobile = useIsMobile()
-    const { isAuthenticated } = useAuthStatus();
+    const auth = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
 
     const imageTransition = useTransition(display, {
         from: { x: -50, opacity: 0 },
@@ -66,8 +67,8 @@ const Introduction = ({ display }: any) => {
                                 textTransition((style, item) => (
                                     <animated.div style={style}>
                                         {
-                                            !isAuthenticated && (
-                                                <Link to={'/registration'}>
+                                            !auth.isAuthenticated && (
+                                                <Link to={'/sign-up'}>
                                                 <Button
                                                   style={{
                                                     backgroundColor: 'rgb(253, 199, 87)',

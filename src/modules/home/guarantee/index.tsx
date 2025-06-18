@@ -12,11 +12,9 @@ import { Button } from 'antd';
 import useOnScreen from "./useOnScreen";
 
 import CopyrightFooter from "../copyrightFooter ";
-import useAuthStatus from "../../../hooks/use-is-authenticated";
 import useIsMobile from "../../../hooks/use-is-mobile";
 
 function HomeGuarantee() {
-  const isAuthenticated = useAuthStatus();
   const isMobile = useIsMobile();
 
   const [displayIntro, setDisplayIntro] = useState(false);

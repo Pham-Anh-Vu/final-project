@@ -1,21 +1,14 @@
-// hooks/useAuthStatus.ts
-import { useEffect } from "react";
 import { useKeycloak } from "@react-keycloak/web";
 
-/**
- * Hook kiểm tra đăng nhập, trả về trạng thái đăng nhập và token hiện tại
- */
 const useAuthStatus = () => {
   const { keycloak } = useKeycloak();
 
-  const isAuthenticated = keycloak?.authenticated ?? false;
-  const token = keycloak?.token ?? null;
-  
-  return {
-    isAuthenticated,
-    token,
-    keycloak,
-  };
+  const isInitialized = keycloak?.token !== undefined; // Đảm bảo init xong
+  const isAuthenticated = keycloak?.authenticated === true;
+
+  const token = keycloak?.token;
+
+  return { isAuthenticated, token, keycloak, isInitialized };
 };
 
 export default useAuthStatus;

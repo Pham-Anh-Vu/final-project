@@ -1,19 +1,16 @@
 import { useKeycloak } from '@react-keycloak/web';
 import { Button, Modal } from 'antd';
 import React from 'react';
-import useAuthStatus from '../../../hooks/use-is-authenticated';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks';
 
 const NotificationLogOut = () => {
-  const { keycloak } = useAuthStatus();
+    const auth = useAppSelector((state) => state.auth);
+    const dispatch = useAppDispatch();
 
-    const handleLogout = () => {
-        keycloak.logout();
-    };
 
     return (
         <Modal
             title="Thông báo đăng xuất"
-            onCancel={handleLogout}
             footer={null}
             centered
             width={400}
@@ -26,7 +23,7 @@ const NotificationLogOut = () => {
         >
             <p>Phiên làm việc của bạn đã hết hạn do không hoạt động. Vui lòng đăng nhập lại để tiếp tục.</p>
             <div style={{ textAlign: 'center', marginTop: '20px' }}>
-                <Button type="primary" onClick={handleLogout}>
+                <Button type="primary">
                     Xác nhận
                 </Button>
             </div>

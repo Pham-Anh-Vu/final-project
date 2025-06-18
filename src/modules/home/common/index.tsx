@@ -15,11 +15,9 @@ import useOnScreen from './useOnScreen';
 import Challenge from './thachthuc';
 import CopyrightFooter from '../copyrightFooter ';
 import useIsMobile from '../../../hooks/use-is-mobile';
-import useAuthStatus from '../../../hooks/use-is-authenticated';
 
 function HomeCommon() {
   const isMobile = useIsMobile()
-  const { isAuthenticated } = useAuthStatus();
 
   const [displayIntro, setDisplayIntro] = useState(false);
   const [displayBlockchain, setDisplayBlockchain] = useState(false);

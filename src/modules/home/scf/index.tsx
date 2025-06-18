@@ -14,12 +14,10 @@ import { Button } from 'antd';
 import useOnScreen from "./useOnScreen";
 
 import CopyrightFooter from "../copyrightFooter ";
-import useAuthStatus from "../../../hooks/use-is-authenticated";
 import useIsMobile from "../../../hooks/use-is-mobile";
 
 function HomeSCF() {
   const isMobile = useIsMobile()
-  const { isAuthenticated, token, keycloak } = useAuthStatus();
 
   const [displayIntro, setDisplayIntro] = useState(false);
   const [displayBlockchain, setdisplayBlockchain] = useState(false);

@@ -14,12 +14,13 @@ import { Button } from 'antd';
 import useOnScreen from './useOnScreen';
 
 import CopyrightFooter from '../copyrightFooter ';
-import useIsAuthenticated from './../../../hooks/use-is-authenticated/index';
 import useIsMobile from '../../../hooks/use-is-mobile';
+import { useAppSelector } from '../../../hooks/hooks';
 
 function HomeLC() {
-  const isAuthenticated = useIsAuthenticated();
   const isMobile = useIsMobile();
+  const auth = useAppSelector((state) => state.auth);
+  
 
   const [displayIntro, setDisplayIntro] = useState(false);
   const [displayDigitalTransformation, setDisplayDigitalTransformation] = useState(false);

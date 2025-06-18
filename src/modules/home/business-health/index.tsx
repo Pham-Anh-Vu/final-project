@@ -14,10 +14,8 @@ import useOnScreen from './useOnScreen';
 
 import CopyrightFooter from '../copyrightFooter ';
 import useIsMobile from '../../../hooks/use-is-mobile';
-import useAuthStatus from '../../../hooks/use-is-authenticated';
 
 function HomeBusinessHealth() {
-  const { isAuthenticated, token, keycloak } = useAuthStatus();
   const isMobile = useIsMobile()
 
   const [displayIntro, setDisplayIntro] = useState(false);

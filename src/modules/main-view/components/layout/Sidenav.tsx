@@ -16,10 +16,13 @@ import { NavLink, useLocation } from "react-router-dom";
 import logo from "../../assets/images/logo.png";
 import React from "react";
 import keycloak from "../../../../keycloak";
+import { useAppDispatch } from "../../../../hooks/hooks";
+import { logout } from "../../../../shared/reducers/authSlice";
 
 function Sidenav({ color }) {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
+  const dispatch = useAppDispatch();
 
   const dashboard = [
     <svg
@@ -245,7 +248,7 @@ function Sidenav({ color }) {
           </NavLink>
         </Menu.Item> */}
         <Menu.Item key="8">
-          <NavLink to="/home" onClick={() => {keycloak.logout()}}>
+          <NavLink to="/home" onClick={() => {dispatch(logout())}}>
             <span className="icon">{signup}</span>
             <span className="label">Log Out</span>
           </NavLink>
