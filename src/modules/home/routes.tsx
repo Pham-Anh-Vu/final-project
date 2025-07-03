@@ -7,8 +7,12 @@ import HomeGuarantee from "./guarantee";
 import HomeLC from "./lc";
 import HomeBusinessHealth from "./business-health";
 import HomePage from ".";
-import SignIn from "../main-view/pages/SignIn";
-import SignUp from "../main-view/pages/SignUp";
+import SignIn from "../main-view/pages/registration/SignIn";
+import SignUp from "../main-view/pages/registration/SignUp";
+import ConfirmEmail from "../main-view/pages/registration/ConfirmEmail";
+import RegistrationPage from "../main-view/pages/registration/SignUp2";
+import GoogleAuthenticatorSetup from "../main-view/pages/registration/GoogleAuthenSetup";
+import RegistrationSuccess from "../main-view/pages/registration/RegistrationSuccess";
 
 // const HomeCommon = React.lazy(() => import('./common'));
 // const HomeSCF = React.lazy(() => import('./scf'));
@@ -26,18 +30,24 @@ const HomeRoute = () => {
         <Route path='business-health' element={<React.Suspense fallback={<div>Loading...</div>}><HomeBusinessHealth /></React.Suspense>} ></Route> */}
         {/* <Route path='scf' element={<React.Suspense fallback={<div>Loading...</div>}><HomeSCF /></React.Suspense>} ></Route> */}
 
-        <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/sign-up" element={<RegistrationPage />} />
         <Route path="/sign-in" element={<SignIn />} />
+        <Route path="/confirm-email" element={<ConfirmEmail />} />
         <Route path="/home/common/*" element={<HomeCommon />} />
         <Route path="/home/scf/*" element={<HomeSCF />} />
         <Route path="/home/guarantee/*" element={<HomeGuarantee />} />
         <Route path="/home/lc/*" element={<HomeLC />} />
+        <Route path="/authenticate-google" element={<GoogleAuthenticatorSetup />} />
+        <Route path="/registration-success" element={<RegistrationSuccess />} />
+
         <Route
           path="/home/business-health/*"
           element={<HomeBusinessHealth />}
         />
         <Route path="/home/main-page/*" element={<HomePage />} />
-        <Route path="*" element={<Navigate to="/home/common" />} />
+        {/* <Route path="*" element={<Navigate to="/home/common" />} /> */}
+        <Route path="*" element={<Navigate to="/home/common/" />} />
+
       </Routes>
     </div>
   );

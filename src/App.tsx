@@ -60,59 +60,5 @@ function App() {
     // </div>
   );
 }
-const SecuredContent = () => {
-
-  // // Gia hạn token mỗi 60s
-  // useEffect(() => {
-  //   const intervalId = setInterval(() => {
-  //     keycloak
-  //       .updateToken(5)
-  //       .then((refreshed) => {
-  //         if (refreshed) {
-  //           console.log("Token refreshed");
-  //         } else {
-  //           console.log("Token still valid");
-  //         }
-  //       })
-  //       .catch(() => {
-  //         setShowLogoutModal(true);
-  //       });
-  //   }, 60000);
-
-  //   return () => clearInterval(intervalId);
-  // }, [keycloak]);
-
-  // // Đếm thời gian không hoạt động
-  // useEffect(() => {
-  //   let timeoutId: ReturnType<typeof setTimeout>;
-  //   const logoutTime = 1 * 60 * 1000;
-
-  //   const resetTimer = () => {
-  //     clearTimeout(timeoutId);
-  //     timeoutId = setTimeout(() => {
-  //       setShowLogoutModal(true);
-  //     }, logoutTime);
-  //   };
-
-  //   ["mousemove", "keydown", "click"].forEach((evt) => {
-  //     window.addEventListener(evt, resetTimer);
-  //   });
-
-  //   resetTimer();
-
-  //   return () => {
-  //     clearTimeout(timeoutId);
-  //     ["mousemove", "keydown", "click"].forEach((evt) => {
-  //       window.removeEventListener(evt, resetTimer);
-  //     });
-  //   };
-  // }, []);
-
-  return (
-    <BrowserRouter>
-      <AppRoutes />
-    </BrowserRouter>
-  );
-};
 
 export default App;

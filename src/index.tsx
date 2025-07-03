@@ -6,13 +6,20 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { store } from "./shared/reducers/store";
 import theme from './shared/theme/themeConfig';
+import { ConfigProvider, App as AntdApp } from "antd"; // ✅ Thêm dòng này
+import "antd/dist/reset.css";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <Provider store={store}>
-    <App />
+    <ConfigProvider theme={theme}> 
+      <AntdApp> 
+        <App />
+      </AntdApp>
+    </ConfigProvider>
   </Provider>
 );
 

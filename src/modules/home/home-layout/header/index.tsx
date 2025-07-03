@@ -17,7 +17,7 @@ import {
 } from "@ant-design/icons";
 import { Link, useNavigate } from "react-router-dom";
 import "./index.css";
-import SignIn from "./../../../main-view/pages/SignIn";
+import SignIn from "../../../main-view/pages/registration/SignIn";
 import { useAppSelector } from "../../../../hooks/hooks";
 
 const { Header, Footer, Sider, Content } = Layout;

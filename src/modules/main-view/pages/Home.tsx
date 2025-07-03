@@ -9,7 +9,7 @@
   =========================================================
   * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   Card,
@@ -23,6 +23,8 @@ import {
   Button,
   Timeline,
   Radio,
+  Tag,
+  Modal,
 } from "antd";
 import {
   ToTopOutlined,
@@ -46,13 +48,37 @@ import team3 from "../assets/images/team-3.jpg";
 import team4 from "../assets/images/team-4.jpg";
 import card from "../assets/images/info-card-1.jpg";
 import React from "react";
+import { useAppSelector } from "../../../hooks/hooks";
+import { ColumnsType } from "antd/es/table";
+import { Table } from "antd/lib";
+import { screenMap } from "../../../shared/mapping-view/screenMap";
+
+interface PendingTask {
+  id: string;
+  taskName: string;
+  createdBy: string;
+  createdAt: string;
+  status: "PENDING" | "REJECTED" | "APPROVED";
+  menuMapping: MenuMapping;
+}
+
+export interface MenuMapping {
+  id: number;
+  classCallBack?: string;
+  methodCallBack?: string;
+  menuName?: string;
+  screenKey?: string;
+}
 
 function Home() {
   const { Title, Text } = Typography;
 
   const onChange = (e) => console.log(`radio checked:${e.target.value}`);
 
+  const auth = useAppSelector((state) => state.auth);
+
   const [reverse, setReverse] = useState(false);
+  const [isUser, setIsUser] = useState(true);
 
   const dollor = [
     <svg
@@ -340,7 +366,120 @@ function Home() {
       }
     },
   };
+  const data: PendingTask[] = [
+    {
+      id: "1",
+      taskName: "Phê duyệt mở tài khoản",
+      createdBy: "Nguyễn Văn A",
+      createdAt: "2025-06-30 10:15",
+      status: "PENDING",
+      menuMapping: {
+        id: 1,
+        classCallBack: "ApproveAccount",
+        methodCallBack: "handleApprove",
+        menuName: "Phê duyệt mở tài khoản",
+        screenKey: "approve-account",
+      },
+    },
+    {
+      id: "2",
+      taskName: "Yêu cầu vay vốn",
+      createdBy: "Trần Thị B",
+      createdAt: "2025-06-30 11:00",
+      status: "PENDING",
+      menuMapping: {
+        id: 1,
+        classCallBack: "ApproveAccount",
+        methodCallBack: "handleApprove",
+        menuName: "Phê duyệt mở tài khoản",
+        screenKey: "loan-request",
+      },
+    },
+  ];
+  const columns: ColumnsType<PendingTask> = [
+    {
+      title: "Tên tác vụ",
+      dataIndex: "taskName",
+      key: "taskName",
+    },
+    {
+      title: "Người tạo",
+      dataIndex: "createdBy",
+      key: "createdBy",
+    },
+    {
+      title: "Thời gian tạo",
+      dataIndex: "createdAt",
+      key: "createdAt",
+    },
+    {
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render: (status) => {
+        const color =
+          status === "PENDING"
+            ? "gold"
+            : status === "APPROVED"
+            ? "green"
+            : "red";
+        const label =
+          status === "PENDING"
+            ? "Đang chờ"
+            : status === "APPROVED"
+            ? "Đã duyệt"
+            : "Từ chối";
+        return <Tag color={color}>{label}</Tag>;
+      },
+    },
+    {
+      key: "action",
+      render: (_, record) => (
+        <Button
+          type="primary"
+          size="small"
+          onClick={() => handleOpenModal(record.menuMapping.screenKey)}
+        >
+          Xem chi tiết
+        </Button>
+      ),
+    },
+  ];
 
+  const handleApprove = (taskId: string) => {
+    console.log("Chi tiết tác vụ:", taskId);
+    // Bạn có thể mở modal hoặc điều hướng trang chi tiết
+  };
+
+  useEffect(() => {
+    console.log("auth", auth.accessToken);
+    const payload = JSON.parse(atob(auth.accessToken.split(".")[1]));
+    const roles = payload.realm_access?.roles || [];
+    // Kiểm tra xem người dùng có phải là ADMIN, GDV và KSV không
+    if (
+      roles.includes("ADMIN") ||
+      roles.includes("GDV") ||
+      roles.includes("KSV")
+    ) {
+      setIsUser(false);
+    }
+  }, [auth]);
+
+  const [currentScreenKey, setCurrentScreenKey] = useState<string | null>(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const handleOpenModal = (screenKey: string) => {
+    setCurrentScreenKey(screenKey);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setCurrentScreenKey(null);
+  };
+
+  const ScreenComponent = currentScreenKey ? screenMap[currentScreenKey] : null;
+  const screenData = null;
   return (
     <>
       <div className="layout-content">
@@ -386,6 +525,42 @@ function Home() {
             </Card>
           </Col>
         </Row>
+
+        {!isUser && (
+          <Row gutter={[24, 0]}>
+            <Col
+              xs={24}
+              sm={24}
+              md={12}
+              lg={12}
+              xl={24}
+              style={{ width: "100%" }}
+              className="mb-24"
+            >
+              <Card
+                title="Danh sách tác vụ chờ duyệt"
+                bordered
+                style={{ borderRadius: 12 }}
+              >
+                <Table columns={columns} dataSource={data} rowKey="id" />
+
+                <Modal
+                  open={modalVisible}
+                  onCancel={closeModal}
+                  footer={null}
+                  width={700}
+                  title="Chi tiết tác vụ"
+                >
+                  {ScreenComponent ? (
+                    ScreenComponent(screenData)
+                  ) : (
+                    <p>Không tìm thấy màn hình</p>
+                  )}
+                </Modal>
+              </Card>
+            </Col>
+          </Row>
+        )}
 
         <Row gutter={[24, 0]}>
           <Col xs={24} sm={24} md={12} lg={12} xl={16} className="mb-24">

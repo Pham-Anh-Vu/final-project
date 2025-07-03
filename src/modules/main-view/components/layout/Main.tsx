@@ -120,7 +120,6 @@ function Main() {
           </AntHeader>
         )}
         <Content className="content-ant"><Outlet /></Content>
-        <Footer />
       </Layout>
     </Layout>
   );
