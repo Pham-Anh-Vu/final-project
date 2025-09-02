@@ -16,6 +16,15 @@ const baseAuthQuery = fetchBaseQuery({
     }
     return headers;
   },
+  responseHandler: async (response) => {
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('application/json')) {
+      return await response.json();
+    } else {
+      // fallback nếu không phải JSON
+      return await response.text();
+    }
+  },
 });
 
 // KHÔNG dispatch logout ở đây nữa, chỉ trả về lỗi

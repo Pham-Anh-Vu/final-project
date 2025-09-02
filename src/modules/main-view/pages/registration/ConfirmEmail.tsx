@@ -115,6 +115,8 @@ export default function ConfirmEmail() {
           requestBody
         );
 
+        console.log("SignUp Response:", signUpResponse);
+
         if (signUpResponse.status === 200 || signUpResponse.status === 201) {
           notification.success({
             message: "Xác thực thành công",

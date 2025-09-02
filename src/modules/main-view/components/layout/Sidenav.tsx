@@ -91,25 +91,28 @@ function Sidenav({ color }) {
     </svg>,
   ];
 
-  const rtl = [
+  const deposit = [
     <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      key={0}
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
     >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M3 6C3 4.34315 4.34315 3 6 3H16C16.3788 3 16.725 3.214 16.8944 3.55279C17.0638 3.89157 17.0273 4.29698 16.8 4.6L14.25 8L16.8 11.4C17.0273 11.703 17.0638 12.1084 16.8944 12.4472C16.725 12.786 16.3788 13 16 13H6C5.44772 13 5 13.4477 5 14V17C5 17.5523 4.55228 18 4 18C3.44772 18 3 17.5523 3 17V6Z"
-        fill={color}
-      ></path>
+      <path d="M12 18H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5" />
+      <path d="M18 12h.01" />
+      <path d="M19 22v-6" />
+      <path d="m22 19-3-3-3 3" />
+      <path d="M6 12h.01" />
+      <circle cx="12" cy="12" r="2" />
     </svg>,
   ];
 
-  const deposit = [
+  const rtl = [
     <svg
       width="20"
       height="20"
@@ -205,16 +208,16 @@ function Sidenav({ color }) {
           </NavLink>
         </Menu.Item>
         <Menu.Item key="2">
-          <NavLink to="/tables">
+          <NavLink to="/customer">
             <span
               className="icon"
               style={{
-                background: page === "tables" ? color : "",
+                background: page === "customer" ? color : "",
               }}
             >
               {tables}
             </span>
-            <span className="label">Tables</span>
+            <span className="label">Khách hàng</span>
           </NavLink>
         </Menu.Item>
         <Menu.Item key="3">
@@ -253,13 +256,39 @@ function Sidenav({ color }) {
             >
               {deposit}
             </span>
-            <span className="label">Gói tài khoản tiết kiệm</span>
+            <span className="label">Gói lãi suất</span>
           </NavLink>
         </Menu.Item>
-        <Menu.Item className="menu-item-header" key="5">
+        <Menu.Item >
+          <NavLink to="/account-saving">
+            <span
+              className="icon"
+              style={{
+                background: page === "profile" ? color : "",
+              }}
+            >
+              {profile}
+            </span>
+            <span className="label">Tiền gửi</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item >
+          <NavLink to="/sysPendingTasks">
+            <span
+              className="icon"
+              style={{
+                background: page === "profile" ? color : "",
+              }}
+            >
+              {profile}
+            </span>
+            <span className="label">Tác vụ chờ duyệt</span>
+          </NavLink>
+        </Menu.Item>
+        <Menu.Item className="menu-item-header">
           Account Pages
         </Menu.Item>
-        <Menu.Item key="6">
+        <Menu.Item >
           <NavLink to="/profile">
             <span
               className="icon"
@@ -278,8 +307,13 @@ function Sidenav({ color }) {
             <span className="label">Sign In</span>
           </NavLink>
         </Menu.Item> */}
-        <Menu.Item key="8">
-          <NavLink to="/home" onClick={() => {dispatch(logout())}}>
+        <Menu.Item>
+          <NavLink
+            to="/home"
+            onClick={() => {
+              dispatch(logout());
+            }}
+          >
             <span className="icon">{signup}</span>
             <span className="label">Log Out</span>
           </NavLink>

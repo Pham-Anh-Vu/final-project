@@ -10,6 +10,9 @@ export const depositApi = baseAuthAPI.injectEndpoints({
         url: `${depositUrl}`,
         method: "GET",
       }),
+      transformResponse: (response: { success: boolean; data: Deposit[]; message: string }) => {
+        return response.data;
+      },
     }),
 // 2. Lấy theo id
     getDepositById: build.query<Deposit, number>({
@@ -17,6 +20,9 @@ export const depositApi = baseAuthAPI.injectEndpoints({
         url: `${depositUrl}/${id}`,
         method: "GET",
       }),
+      transformResponse: (response: { success: boolean; data: Deposit; message: string }) => {
+        return response.data;
+      },
     }),
 
     // 3. Tạo mới
@@ -26,6 +32,9 @@ export const depositApi = baseAuthAPI.injectEndpoints({
         method: "POST",
         body,
       }),
+      transformResponse: (response: { success: boolean; data: Deposit; message: string }) => {
+        return response.data;
+      },
     }),
 
     // 4. Cập nhật
@@ -35,14 +44,20 @@ export const depositApi = baseAuthAPI.injectEndpoints({
         method: "PUT",
         body: data,
       }),
+      transformResponse: (response: { success: boolean; data: Deposit; message: string }) => {
+        return response.data;
+      },
     }),
 
     // 5. Xoá
-    deleteDeposit: build.mutation<void, number>({
+    deleteDeposit: build.mutation<Deposit, number>({
       query: (id) => ({
         url: `${depositUrl}/${id}`,
         method: "DELETE",
       }),
+      transformResponse: (response: { success: boolean; data: Deposit; message: string }) => {
+        return response.data;
+      },
     }),
   }),
 

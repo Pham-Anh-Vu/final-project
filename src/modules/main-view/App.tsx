@@ -24,6 +24,8 @@ import "./assets/styles/responsive.css";
 import React from "react";
 import ConfirmEmail from "./pages/registration/ConfirmEmail";
 import DepositListView from "./pages/deposit/DepositListView";
+import SysPendingTaskListView from "./pages/syspendingtask/SysPendingTask";
+import CreateSavingAccountPage from "./pages/savingaccount/SavingAccountPage";
 
 function MainRoute() {
   return (
@@ -32,14 +34,17 @@ function MainRoute() {
       <Route path="/sign-up" element={<SignUp />} />
       <Route path="/sign-in" element={<SignIn />} />
       <Route path="/confirm-email" element={<ConfirmEmail />} />
-      
+
       {/* Nếu Main là layout chung */}
       <Route element={<Main />}>
         <Route path="/dashboard" element={<Home />} />
-        <Route path="/tables" element={<Tables />} />
+        <Route path="/customer" element={<Tables />} />
         <Route path="/billing" element={<Billing />} />
         <Route path="/rtl" element={<Rtl />} />
         <Route path="/profile" element={<Profile />} />
+        <Route path="/deposit" element={<DepositListView />} />
+        <Route path="/sysPendingTasks" element={<SysPendingTaskListView />} />
+        <Route path="/account-saving" element={<CreateSavingAccountPage />} />
         <Route path="/deposit" element={<DepositListView />} />
       </Route>
 

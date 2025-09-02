@@ -25,6 +25,11 @@ import {
   Drawer,
   Typography,
   Switch,
+  Card,
+  Form,
+  Select,
+  message,
+  Spin,
 } from "antd";
 
 import {
@@ -32,6 +37,10 @@ import {
   StarOutlined,
   TwitterOutlined,
   FacebookFilled,
+  UserOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  InboxOutlined,
 } from "@ant-design/icons";
 
 import { NavLink, Link } from "react-router-dom";
@@ -39,6 +48,9 @@ import styled from "styled-components";
 import avtar from "../../assets/images/team-2.jpg";
 import React from "react";
 import { useKeycloak } from "@react-keycloak/web";
+import TextArea from "antd/es/input/TextArea";
+import Dragger from "antd/es/upload/Dragger";
+import { useCreateSupportRequestMutation } from "../../../../service/send-email.api";
 
 const ButtonContainer = styled.div`
   .ant-btn-primary {
@@ -261,15 +273,28 @@ function Header({
   handleFixedNavbar,
 }) {
   const { Title, Text } = Typography;
-  
+  const [form] = Form.useForm();
+
   const [visible, setVisible] = useState(false);
   const [sidenavType, setSidenavType] = useState("transparent");
+  const [createSupportRequest, { isLoading }] =
+    useCreateSupportRequestMutation();
 
   useEffect(() => window.scrollTo(0, 0));
 
   const showDrawer = () => setVisible(true);
   const hideDrawer = () => setVisible(false);
 
+  const handleSubmit = async (values: any) => {
+    try {
+      await createSupportRequest(values).unwrap();
+      message.success("Yêu cầu của bạn đã được gửi thành công!");
+      form.resetFields();
+    } catch (error) {
+      console.error("Lỗi khi gửi yêu cầu hỗ trợ:", error);
+      message.error("Đã có lỗi xảy ra. Vui lòng thử lại sau!");
+    }
+  };
   return (
     <>
       <div className="setting-drwer" onClick={showDrawer}>
@@ -282,7 +307,9 @@ function Header({
               <NavLink to="/">Pages</NavLink>
             </Breadcrumb.Item>
             <Breadcrumb.Item>
-              <span style={{ textTransform: "capitalize" }}>{name.replace("/", "")}</span>
+              <span style={{ textTransform: "capitalize" }}>
+                {name.replace("/", "")}
+              </span>
             </Breadcrumb.Item>
           </Breadcrumb>
           <div className="ant-page-header-heading">
@@ -319,109 +346,163 @@ function Header({
           <Drawer
             className="settings-drawer"
             mask={true}
-            width={360}
+            width={760}
             onClose={hideDrawer}
             placement={placement}
             visible={visible}
           >
-            <div>
-              <div className="header-top">
-                <Title level={4}>
-                  Configurator
-                  <Text className="subtitle">See our dashboard options.</Text>
-                </Title>
+            <Spin spinning={isLoading} tip="Đang gửi yêu cầu...">
+              <div
+                className="wrapper"
+                style={{
+                  backgroundImage:
+                    "url(" + "/images/home/header_background.png" + ")",
+                }}
+              >
+                <h2>Gửi yêu cầu hỗ trợ</h2>
               </div>
+              {/* <Title
+                level={4}
+                style={{ textAlign: "center", marginBottom: 24 }}
 
-              <div className="sidebar-color">
-                <Title level={5}>Sidebar Color</Title>
-                <div className="theme-color mb-2">
-                  <ButtonContainer>
-                    <Button
-                      type="primary"
-                      onClick={() => handleSidenavColor("#1890ff")}
-                    >
-                      1
-                    </Button>
-                    <Button
-                      type="primary" style={{ backgroundColor: "#52c41a", borderColor: "#52c41a" }}
-                      onClick={() => handleSidenavColor("#52c41a")}
-                    >
-                      1
-                    </Button>
-                    <Button
-                      type="primary" danger
-                      onClick={() => handleSidenavColor("#d9363e")}
-                    >
-                      1
-                    </Button>
-                    <Button
-                      type="default" style={{ backgroundColor: "#fadb14", color: "#000", borderColor: "#fadb14" }}
-                      onClick={() => handleSidenavColor("#fadb14")}
-                    >
-                      1
-                    </Button>
+              >
+                
+              </Title> */}
 
-                    <Button
-                      type="default" style={{ backgroundColor: "#000", color: "#fff", borderColor: "#000" }}
-                      onClick={() => handleSidenavColor("#111")}
-                    >
-                      1
-                    </Button>
-                  </ButtonContainer>
-                </div>
+              <Form
+                layout="vertical"
+                form={form}
+                onFinish={handleSubmit}
+                autoComplete="off"
+              >
+                <Form.Item
+                  label="Họ và tên"
+                  name="fullName"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập họ và tên!" },
+                  ]}
+                >
+                  <Input
+                    prefix={<UserOutlined />}
+                    placeholder="Nguyễn Văn A"
+                    size="large"
+                  />
+                </Form.Item>
 
-                <div className="sidebarnav-color mb-2">
-                  <Title level={5}>Sidenav Type</Title>
-                  <Text>Choose between 2 different sidenav types.</Text>
-                  <ButtonContainer className="trans">
-                    <Button
-                      type={sidenavType === "transparent" ? "primary" : "default"}
-                      onClick={() => {
-                        handleSidenavType("transparent");
-                        setSidenavType("transparent");
-                      }}
-                    >
-                      TRANSPARENT
-                    </Button>
-                    <Button
-                      type={sidenavType === "white" ? "primary" : "default"}
-                      onClick={() => {
-                        handleSidenavType("#fff");
-                        setSidenavType("white");
-                      }}
-                    >
-                      WHITE
-                    </Button>
-                  </ButtonContainer>
-                </div>
-                <div className="fixed-nav mb-2">
-                  <Title level={5}>Navbar Fixed </Title>
-                  <Switch onChange={(e) => handleFixedNavbar(e)} />
-                </div>
-                <div className="ant-docment">
-                  <ButtonContainer>
-                    <Button type="default" style={{ backgroundColor: "#000", color: "#fff", borderColor: "#000" }} size="large">
-                      FREE DOWNLOAD
-                    </Button>
-                    <Button size="large">VIEW DOCUMENTATION</Button>
-                  </ButtonContainer>
-                </div>
-                <div className="viewstar">
-                  <a href="#pablo">{<StarOutlined />} Star</a>
-                  <a href="#pablo"> 190</a>
-                </div>
+                <Form.Item
+                  label="Email liên hệ"
+                  name="email"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập email!" },
+                    { type: "email", message: "Email không hợp lệ!" },
+                  ]}
+                >
+                  <Input
+                    prefix={<MailOutlined />}
+                    placeholder="email@example.com"
+                    size="large"
+                  />
+                </Form.Item>
 
-                <div className="ant-thank">
-                  <Title level={5} className="mb-2">
-                    Thank you for sharing!
-                  </Title>
-                  <ButtonContainer className="social">
-                    <Button type="default" style={{ backgroundColor: "#000", color: "#fff", borderColor: "#000" }}>{<TwitterOutlined />}TWEET</Button>
-                    <Button type="default" style={{ backgroundColor: "#000", color: "#fff", borderColor: "#000" }}>{<FacebookFilled />}SHARE</Button>
-                  </ButtonContainer>
-                </div>
-              </div>
-            </div>
+                <Form.Item
+                  label="Số điện thoại"
+                  name="phone"
+                  rules={[
+                    { required: true, message: "Vui lòng nhập số điện thoại!" },
+                  ]}
+                >
+                  <Input
+                    prefix={<PhoneOutlined />}
+                    placeholder="098xxxxxxx"
+                    size="large"
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Loại yêu cầu"
+                  name="type"
+                  rules={[
+                    { required: true, message: "Vui lòng chọn loại yêu cầu!" },
+                  ]}
+                >
+                  <Select
+                    placeholder="Chọn loại yêu cầu"
+                    size="large"
+                    options={[
+                      { label: "Vấn đề giao dịch", value: "transaction" },
+                      { label: "Thẻ ATM", value: "card" },
+                      { label: "Tài khoản", value: "account" },
+                      { label: "Ứng dụng ngân hàng", value: "app" },
+                      { label: "Khác", value: "other" },
+                    ]}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Mức độ ưu tiên"
+                  name="priority"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng chọn mức độ ưu tiên!",
+                    },
+                  ]}
+                >
+                  <Select
+                    placeholder="Chọn mức độ"
+                    size="large"
+                    options={[
+                      { label: "Thấp", value: "low" },
+                      { label: "Trung bình", value: "medium" },
+                      { label: "Cao", value: "high" },
+                    ]}
+                  />
+                </Form.Item>
+
+                <Form.Item
+                  label="Nội dung yêu cầu"
+                  name="content"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập nội dung yêu cầu!",
+                    },
+                  ]}
+                >
+                  <TextArea
+                    rows={5}
+                    showCount
+                    maxLength={1000}
+                    placeholder="Mô tả chi tiết vấn đề bạn gặp phải..."
+                    size="large"
+                  />
+                </Form.Item>
+
+                <Form.Item label="Tệp đính kèm (tuỳ chọn)" name="attachment">
+                  <Dragger
+                    multiple={false}
+                    beforeUpload={() => false} // Không upload ngay lập tức
+                    maxCount={1}
+                  >
+                    <p className="ant-upload-drag-icon">
+                      <InboxOutlined />
+                    </p>
+                    <p className="ant-upload-text">
+                      Kéo & thả hoặc bấm để chọn file
+                    </p>
+                    <p className="ant-upload-hint">
+                      Hỗ trợ ảnh, PDF, tài liệu liên quan
+                    </p>
+                  </Dragger>
+                </Form.Item>
+
+                <Form.Item style={{ textAlign: "center", marginTop: 24 }}>
+                  <Button type="primary" htmlType="submit" size="large">
+                    Gửi yêu cầu
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Spin>
           </Drawer>
           <Link to="/profile" className="btn-sign-in">
             {profile}

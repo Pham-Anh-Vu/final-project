@@ -1,0 +1,18 @@
+.wrapper {
+  display: flex;
+  justify-content: center; /* căn giữa theo trục X */
+  align-items: center;     /* căn giữa theo trục Y */
+  height: 300px;           /* chiều cao cần thiết để canh giữa */
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 20px;
+  background-repeat: no-repeat;
+}
+
+.wrapper h2 {
+  color: white; /* tùy chỉnh màu chữ */
+  font-size: 2rem;
+  padding: 1rem 2rem;
+  background-color: rgba(0, 0, 0, 0.4); /* nền mờ cho chữ dễ đọc */
+  border-radius: 8px;
+}
