@@ -179,7 +179,7 @@ function Billing() {
   // Loading state
   if (balanceLoading && !balanceData) {
     return (
-      <div className="banking-dashboard-container">
+      <div>
         <div className="dashboard-loading">
           <Spin size="large" indicator={<ReloadOutlined className="dashboard-loading-spinner" spin />} />
           <Title level={3} style={{ marginTop: 24, color: 'white' }}>
@@ -193,7 +193,7 @@ function Billing() {
   const chartData = getChartData();
 
   return (
-    <div className="banking-dashboard-container">
+    <div>
       <Card className="banking-dashboard-main-card">
         {/* Header */}
         <div className="banking-dashboard-header">
@@ -534,6 +534,7 @@ function Billing() {
 }
 
 export default Billing;
+
 
 
 

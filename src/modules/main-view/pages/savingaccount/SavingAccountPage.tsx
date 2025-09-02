@@ -187,7 +187,7 @@ const CreateSavingAccountPage: React.FC = () => {
 
   if (depositsLoading) {
     return (
-      <div className="savings-account-container">
+      <div>
         <div style={{ textAlign: 'center', paddingTop: '200px' }}>
           <Spin size="large" indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
           <Title level={3} style={{ marginTop: 24, color: 'white' }}>
@@ -199,7 +199,7 @@ const CreateSavingAccountPage: React.FC = () => {
   }
 
   return (
-    <div className="savings-account-container">
+    <div>
       <Card className="savings-account-main-card">
         {/* Header */}
         <div className="savings-account-header">
@@ -309,7 +309,7 @@ const CreateSavingAccountPage: React.FC = () => {
                       onChange={(val) => setBalance(Number(val) || 0)}
                       placeholder="Nhập số tiền (tối thiểu 1,000,000 VND)"
                       formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                      parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+                      // parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
                     />
                     <span className="currency-label">VND</span>
                   </div>

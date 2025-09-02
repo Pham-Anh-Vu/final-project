@@ -204,17 +204,10 @@ const DepositListView: React.FC = () => {
   const handleDelete = async () => {
     setIsLoading(true);
     try {
-      const userInfo = getCurrentUserInfo();
-      const depositUpdate = {
-        ...selectedDeposit,
-        id: null,
-        orgId: selectedDeposit.id,
-        createdAt: new Date(),
-        createdBy: userInfo?.username || "system",
-        action: "D", // Xóa
-      };
-
-      const result = await createDeposit(depositUpdate).unwrap();
+      // Use proper deleteDeposit API
+      const result = await deleteDeposit(selectedDeposit.id).unwrap();
+      
+      // Create sysPendingTask for approval workflow
       const pendingTask = {
         entityId: result.id,
         identifyId: result.id,
@@ -252,17 +245,13 @@ const DepositListView: React.FC = () => {
     
     try {
       if (newDeposit.id) {
-        // Update existing deposit
-        const depositUpdate = {
-          ...newDeposit,
-          id: null,
-          orgId: newDeposit.id,
-          createdAt: new Date(),
-          createdBy: userInfo?.username || "system",
-          action: "U", // Update
-        };
-
-        const result = await createDeposit(depositUpdate).unwrap();
+        // Update existing deposit - Use proper updateDeposit API
+        const result = await updateDeposit({ 
+          id: newDeposit.id, 
+          data: newDeposit 
+        }).unwrap();
+        
+        // Create sysPendingTask for approval workflow
         const pendingTask = {
           entityId: result.id,
           identifyId: result.id,
@@ -281,27 +270,8 @@ const DepositListView: React.FC = () => {
           duration: 4,
         });
       } else {
-        // Create new deposit
-        const newDepositData = {
-          ...newDeposit,
-          createdAt: new Date(),
-          createdBy: userInfo?.username || "system",
-          apprStatus: "N",
-          action: "C", // Create
-        };
-
-        const result = await createDeposit(newDepositData).unwrap();
-        const pendingTask = {
-          entityId: result.id,
-          identifyId: result.id,
-          menuMappingName: "Lãi suất tiết kiệm",
-          classCallBack: "DepositBpm",
-          secretKey: "deposit",
-          taskAction: "C",
-          apprStatus: "N",
-        };
-
-        await createPendingTask(pendingTask);
+        // Create new deposit - Backend handles approval workflow
+        const result = await createDeposit(newDeposit).unwrap();
         
         message.success({
           content: `Gói lãi suất "${newDeposit.name}" đã được tạo thành công và đang chờ phê duyệt`,
@@ -407,7 +377,7 @@ const DepositListView: React.FC = () => {
 
   if (depositsLoading && !fetchedDeposits) {
     return (
-      <div className="deposit-management-container">
+      <div >
         <div className="deposit-loading">
           <Spin size="large" indicator={<ReloadOutlined className="deposit-loading-spinner" spin />} />
           <Title level={3} style={{ marginTop: 24, color: 'white' }}>
@@ -419,7 +389,7 @@ const DepositListView: React.FC = () => {
   }
 
   return (
-    <div className="deposit-management-container">
+    <div>
       <Card className="deposit-management-main-card">
         {/* Header */}
         <div className="deposit-management-header">

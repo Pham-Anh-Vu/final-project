@@ -283,12 +283,12 @@ const DepositDetailView: React.FC<DataDetailViewProps> = (props) => {
             >
               <InputNumber 
                 className="deposit-form-number"
+                style={{ width: '100%' }}
                 min={0.0001}
                 max={50}
                 step={0.0001}
                 precision={4}
                 placeholder="Nhập lãi suất (VD: 7.5)"
-                addonAfter={<PercentageOutlined />}
                 formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                 parser={(value) => value!.replace(/\$\s?|(,*)/g, '') as any}
               />
