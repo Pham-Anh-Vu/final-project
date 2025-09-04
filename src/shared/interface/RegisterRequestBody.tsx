@@ -1,5 +1,5 @@
 export interface RegisterRequestBody {
-  username: string;
+username: string;
   email: string;
   emailVerified: boolean;
   firstName: string;

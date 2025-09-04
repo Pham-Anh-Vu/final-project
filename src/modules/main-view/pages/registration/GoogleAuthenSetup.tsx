@@ -50,6 +50,8 @@ const GoogleAuthenticatorSetup: React.FC = () => {
       );
       setLoading(false);
 
+      console.log("QR Response:", response);
+
       if (response.status === 200 && response.data.qrCode) {
         setQrLink(response.data.qrCode);
         return response.data.qrCode;

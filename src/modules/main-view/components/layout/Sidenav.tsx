@@ -18,6 +18,7 @@ import React from "react";
 import keycloak from "../../../../keycloak";
 import { useAppDispatch } from "../../../../hooks/hooks";
 import { logout } from "../../../../shared/reducers/authSlice";
+import Header from "./Header";
 
 function Sidenav({ color }) {
   const { pathname } = useLocation();
@@ -145,6 +146,25 @@ function Sidenav({ color }) {
         d="M18 10C18 14.4183 14.4183 18 10 18C5.58172 18 2 14.4183 2 10C2 5.58172 5.58172 2 10 2C14.4183 2 18 5.58172 18 10ZM12 7C12 8.10457 11.1046 9 10 9C8.89543 9 8 8.10457 8 7C8 5.89543 8.89543 5 10 5C11.1046 5 12 5.89543 12 7ZM9.99993 11C7.98239 11 6.24394 12.195 5.45374 13.9157C6.55403 15.192 8.18265 16 9.99998 16C11.8173 16 13.4459 15.1921 14.5462 13.9158C13.756 12.195 12.0175 11 9.99993 11Z"
         fill={color}
       ></path>
+    </svg>,
+  ];
+
+  const encryption = [
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      key={0}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+        fill={color}
+      />
+      <circle cx="10" cy="13" r="1" fill="white"/>
     </svg>,
   ];
 
@@ -285,6 +305,19 @@ function Sidenav({ color }) {
             <span className="label">Tác vụ chờ duyệt</span>
           </NavLink>
         </Menu.Item>
+        <Menu.Item >
+          <NavLink to="/encryption-demo">
+            <span
+              className="icon"
+              style={{
+                background: page === "encryption-demo" ? color : "",
+              }}
+            >
+              {encryption}
+            </span>
+            <span className="label">🔐 Demo Mã Hóa</span>
+          </NavLink>
+        </Menu.Item>
         <Menu.Item className="menu-item-header">
           Account Pages
         </Menu.Item>
@@ -331,7 +364,8 @@ function Sidenav({ color }) {
           </span>
           <h6>Need Help?</h6>
           <p>Please call my team</p>
-          <Button type="primary" className="ant-btn-sm ant-btn-block">
+          <Button type="primary" className="ant-btn-sm ant-btn-block" onClick={() => {
+          } }>
             MESSAGE
           </Button>
         </div>

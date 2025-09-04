@@ -109,6 +109,8 @@ export default function ConfirmEmail() {
         otp,
       });
 
+      console.log("Verify Response:", verifyResponse);
+
       if (verifyResponse.status === 200) {
         const signUpResponse = await axios.post(
           `${API_BASE_URL}/auth/sign-up`,

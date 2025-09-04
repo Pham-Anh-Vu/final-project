@@ -26,6 +26,7 @@ import ConfirmEmail from "./pages/registration/ConfirmEmail";
 import DepositListView from "./pages/deposit/DepositListView";
 import SysPendingTaskListView from "./pages/syspendingtask/SysPendingTask";
 import CreateSavingAccountPage from "./pages/savingaccount/SavingAccountPage";
+import EncryptionDemo from "./pages/EncryptionDemo";
 
 function MainRoute() {
   return (
@@ -46,6 +47,7 @@ function MainRoute() {
         <Route path="/sysPendingTasks" element={<SysPendingTaskListView />} />
         <Route path="/account-saving" element={<CreateSavingAccountPage />} />
         <Route path="/deposit" element={<DepositListView />} />
+        <Route path="/encryption-demo" element={<EncryptionDemo />} />
       </Route>
 
       {/* Redirect fallback */}

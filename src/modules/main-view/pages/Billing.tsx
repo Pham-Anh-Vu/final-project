@@ -121,6 +121,8 @@ function Billing() {
   const getChartData = (): ChartData[] => {
     if (!assetAllocation) return [];
     
+    console.log('Asset Allocation:', assetAllocation);
+
     return [
       {
         name: 'Tiền mặt',

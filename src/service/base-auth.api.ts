@@ -42,6 +42,6 @@ const baseAuthQueryWithRetry = retry(baseQueryWithReauth, { maxRetries: 1 });
 export const baseAuthAPI = createApi({
   reducerPath: 'splitApi',
   baseQuery: baseAuthQueryWithRetry,
-  tagTypes: ['UserCompany', 'Bank', 'Counter'],
+  tagTypes: ['UserCompany', 'Bank', 'Counter', 'Profile'],
   endpoints: () => ({}),
 });
