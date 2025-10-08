@@ -68,3 +68,22 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ profile }) => {
   );
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

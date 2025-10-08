@@ -40,6 +40,7 @@ export default function RegistrationPage() {
       firstName: values.firstName,
       lastName: values.lastName,
       phone: values.phone,
+      identityNo: values.identityNo,
       enabled: false,
       credentials: [
         {
@@ -145,6 +146,22 @@ export default function RegistrationPage() {
                     </Form.Item>
 
                     <Form.Item
+                      name="identityNo"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Vui lòng nhập số CMND/CCCD!",
+                        },
+                        {
+                          pattern: /^[0-9]{9,12}$/,
+                          message: "Số CMND/CCCD phải từ 9-12 chữ số!",
+                        },
+                      ]}
+                    >
+                      <Input placeholder="Số CMND/CCCD" />
+                    </Form.Item>
+
+                    <Form.Item
                       name="password"
                       rules={[
                         {
@@ -179,7 +196,16 @@ export default function RegistrationPage() {
                       <Input.Password placeholder="Nhập lại mật khẩu" />
                     </Form.Item>
 
-                    <Form.Item name="remember" valuePropName="checked">
+                    <Form.Item 
+                      name="remember" 
+                      valuePropName="checked"
+                      rules={[
+                        {
+                          validator: (_, value) =>
+                            value ? Promise.resolve() : Promise.reject(new Error('Bạn phải đồng ý với điều khoản và điều kiện!')),
+                        },
+                      ]}
+                    >
                       <Checkbox>
                         Tôi đồng ý với{" "}
                         <a href="#pablo" className="font-bold text-dark">
@@ -200,9 +226,9 @@ export default function RegistrationPage() {
                   </Form>
 
                   <p className="font-semibold text-muted text-center">
-                    Already have an account?{" "}
+                    Đã có tài khoản?{" "}
                     <Link to="/sign-in" className="font-bold text-dark">
-                      Sign In
+                      Đăng nhập
                     </Link>
                   </p>
                 </Card>

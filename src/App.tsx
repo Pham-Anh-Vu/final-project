@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 import NotificationLogOut from "./modules/function/notification-log-out";
 import { useAppDispatch, useAppSelector } from "./hooks/hooks";
 import { login, logout } from "./shared/reducers/authSlice";
+import { useInactivityDetector } from "./hooks/useInactivityDetector";
 
 interface DecodedToken {
   realm_access?: {
@@ -29,10 +30,53 @@ function App() {
   const [username, setUsername] = useState("avuvu1@yopmail.com");
   const [password, setPassword] = useState("1");
 
+  // Inactivity Detection: 3 minutes = 180,000 milliseconds
+  const INACTIVITY_TIMEOUT = 3 * 60 * 1000; // 3 minutes
+
+  const handleInactivity = () => {
+    // Only show modal if user is authenticated
+    if (auth.isAuthenticated && auth.accessToken) {
+      setShowLogoutModal(true);
+    }
+  };
+
+  const { resetInactivityTimer } = useInactivityDetector({
+    onInactive: handleInactivity,
+    delay: INACTIVITY_TIMEOUT,
+    events: [
+      'mousedown',
+      'mousemove', 
+      'keypress',
+      'scroll',
+      'touchstart',
+      'click',
+      'wheel',
+      'keydown',
+      'keyup'
+    ]
+  });
+
+  const handleLogoutConfirm = () => {
+    setShowLogoutModal(false);
+    // The logout will be handled by NotificationLogOut component
+  };
+
+  const handleLogoutCancel = () => {
+    setShowLogoutModal(false);
+    // Reset the inactivity timer when user cancels
+    resetInactivityTimer();
+  };
+
   return (
     <BrowserRouter>
       <AppRoutes />
-      {showLogoutModal && <NotificationLogOut />}
+      {showLogoutModal && (
+        <NotificationLogOut 
+          visible={showLogoutModal}
+          onConfirm={handleLogoutConfirm}
+          onCancel={handleLogoutCancel}
+        />
+      )}
     </BrowserRouter>
 
     // <div style={{ padding: 20 }}>

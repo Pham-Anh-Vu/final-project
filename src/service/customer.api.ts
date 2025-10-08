@@ -11,6 +11,9 @@ export interface CustomerBalance {
 export interface SavingAccountDetail {
   id: number;
   accountNumber: string;
+  customerName?: string;
+  cusCode?: string;
+  identityNo?: string;
   depositTypeName: string;
   interestRate: number;
   balance: number;
@@ -36,7 +39,7 @@ export interface SavingTransaction {
 }
 
 export interface AssetAllocation {
-  cashAmount: number;
+  cashAmount: number; // Backend now returns Long (JSON number) instead of BigDecimal
   savingsAmount: number;
   totalAmount: number;
   cashPercentage: number;
@@ -116,6 +119,17 @@ export const customerApi = baseAuthAPI.injectEndpoints({
         method: 'POST',
       }),
     }),
+    
+    // Get saving account by ID (for admin/KSV)
+    getSavingAccountById: build.query<SavingAccountDetail, number>({
+      query: (accountId) => ({
+        url: `/saving-account/admin/${accountId}`,
+        method: 'GET',
+      }),
+      transformResponse: (response: { success: boolean; data: SavingAccountDetail; message: string }) => {
+        return response.data;
+      },
+    }),
   }),
 });
 
@@ -125,5 +139,6 @@ export const {
   useGetSavingTransactionsQuery,
   useGetAssetAllocationQuery,
   useGetAllCustomersQuery,
-  useCalculateCurrentInterestMutation
+  useCalculateCurrentInterestMutation,
+  useGetSavingAccountByIdQuery
 } = customerApi;

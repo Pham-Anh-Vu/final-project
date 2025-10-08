@@ -28,9 +28,11 @@ import {
   PercentageOutlined,
   ReloadOutlined,
   ArrowUpOutlined,
-  ArrowDownOutlined
+  ArrowDownOutlined,
+  StopOutlined
 } from '@ant-design/icons';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip as RechartsTooltip } from 'recharts';
+
 import {
   useGetCustomerBalanceQuery,
   useGetCustomerSavingAccountsQuery,
@@ -42,6 +44,8 @@ import {
   AssetAllocation
 } from '../../../service/customer.api';
 import { useAppSelector } from '../../../hooks/hooks';
+import EarlyClosureModal from '../../../components/common/EarlyClosureModal';
+import { ProfessionalHeader } from '../../../components/common/ProfessionalHeader';
 import './Billing.css';
 
 const { Title, Text } = Typography;
@@ -56,13 +60,15 @@ function Billing() {
   // State management
   const [isBalanceVisible, setIsBalanceVisible] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [showEarlyClosureModal, setShowEarlyClosureModal] = useState(false);
+  const [selectedAccountForClosure, setSelectedAccountForClosure] = useState<SavingAccountDetail | null>(null);
   
   // API hooks
   const { data: balanceData, isLoading: balanceLoading, refetch: refetchBalance } = useGetCustomerBalanceQuery();
   const { data: savingAccounts, isLoading: savingsLoading, refetch: refetchSavings } = useGetCustomerSavingAccountsQuery();
-  const { data: transactions, isLoading: transactionsLoading } = useGetSavingTransactionsQuery({ limit: 10 });
-  const { data: assetAllocation, isLoading: allocationLoading } = useGetAssetAllocationQuery();
-  
+  const { data: transactions, isLoading: transactionsLoading, refetch: refetchAllTransactions } = useGetSavingTransactionsQuery({ limit: 10 });
+  const { data: assetAllocation, isLoading: allocationLoading, refetch: refetchAllocation } = useGetAssetAllocationQuery();
+
   const auth = useAppSelector((state) => state.auth);
 
   // Utility functions
@@ -93,6 +99,16 @@ function Billing() {
     }).format(amount);
   };
 
+  // Utility function to safely convert amount to number (backward compatibility)
+  const safeParseAmount = (amount: any): number => {
+    if (typeof amount === 'number') return amount;
+    if (typeof amount === 'string') return parseFloat(amount) || 0;
+    if (typeof amount === 'object' && amount !== null) {
+      return parseFloat(amount.toString()) || 0;
+    }
+    return Number(amount) || 0;
+  };
+
   const calculateCurrentInterest = (account: SavingAccountDetail): number => {
     const now = new Date();
     const startDate = new Date(account.startDate);
@@ -119,22 +135,41 @@ function Billing() {
   };
 
   const getChartData = (): ChartData[] => {
-    if (!assetAllocation) return [];
+    if (!assetAllocation) {
+      console.log('No assetAllocation data');
+      return [];
+    }
     
-    console.log('Asset Allocation:', assetAllocation);
+    console.log('Asset Allocation Raw:', assetAllocation);
+    
+    const cashAmount = safeParseAmount(assetAllocation.cashAmount);
+    const savingsAmount = safeParseAmount(assetAllocation.savingsAmount);
 
-    return [
+    console.log('Converted Cash Amount:', cashAmount);
+    console.log('Converted Savings Amount:', savingsAmount);
+
+    // Tạo chartData với validation
+    const chartData = [
       {
         name: 'Tiền mặt',
-        value: assetAllocation.cashAmount,
+        value: cashAmount,
         color: '#1890ff'
       },
       {
         name: 'Tiết kiệm',
-        value: assetAllocation.savingsAmount,
+        value: savingsAmount,
         color: '#52c41a'
       }
-    ];
+    ].filter(item => {
+      const isValid = item.value > 0 && !isNaN(item.value) && isFinite(item.value);
+      console.log(`Item ${item.name}: value=${item.value}, isValid=${isValid}`);
+      return isValid;
+    });
+    
+    console.log('Final Chart Data:', chartData);
+    console.log('Chart Data length:', chartData.length);
+    
+    return chartData;
   };
 
   const getTransactionIcon = (type: string) => {
@@ -170,7 +205,30 @@ function Billing() {
   const handleRefresh = () => {
     refetchBalance();
     refetchSavings();
+    refetchAllTransactions();
+    refetchAllocation();
     message.success('Dữ liệu đã được cập nhật');
+  };
+
+  const handleEarlyClosureClick = (account: SavingAccountDetail) => {
+    setSelectedAccountForClosure(account);
+    setShowEarlyClosureModal(true);
+  };
+
+  const handleEarlyClosureSuccess = () => {
+    setShowEarlyClosureModal(false);
+    setSelectedAccountForClosure(null);
+    // Refresh data after successful closure
+    refetchBalance();
+    refetchSavings();
+    refetchAllTransactions();
+    refetchAllocation();
+    message.success('Tài khoản đã được tất toán thành công!');
+  };
+
+  const handleEarlyClosureCancel = () => {
+    setShowEarlyClosureModal(false);
+    setSelectedAccountForClosure(null);
   };
 
   // Load user info
@@ -197,16 +255,14 @@ function Billing() {
   return (
     <div>
       <Card className="banking-dashboard-main-card">
-        {/* Header */}
-        <div className="banking-dashboard-header">
-          <Title level={1}>
-            <WalletOutlined style={{ marginRight: 12 }} />
-            Dashboard Tài Chính
-          </Title>
-          <Text>
-            Quản lý tài khoản và theo dõi tài sản một cách chuyên nghiệp
-          </Text>
-        </div>
+        {/* Professional Header */}
+        <ProfessionalHeader
+          icon={<WalletOutlined />}
+          title="Dashboard Tài Chính"
+          subtitle="Quản lý tài khoản và theo dõi tài sản một cách chuyên nghiệp"
+          variant="primary"
+          size="large"
+        />
 
         {/* Content */}
         <div className="banking-dashboard-content">
@@ -279,29 +335,41 @@ function Billing() {
                 </div>
                 
                 <div className="asset-allocation-content">
-                  <div className="chart-container">
-                    <ResponsiveContainer width={250} height={250}>
-                      <PieChart>
-                        <Pie
-                          data={chartData}
-                          cx="50%"
-                          cy="50%"
-                          innerRadius={60}
-                          outerRadius={100}
-                          paddingAngle={5}
-                          dataKey="value"
-                        >
-                          {chartData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <RechartsTooltip 
-                          formatter={(value: any) => [formatCurrency(value), '']}
-                        />
-                      </PieChart>
-                    </ResponsiveContainer>
+                  <div className="chart-container">      
+                    {chartData.length > 0 ? (
+                      <div>
+                       
+                         <div style={{ marginBottom: 20 }}>
+                          <strong>Tỷ lệ tài sản:</strong>
+                          <PieChart width={250} height={250}>
+                            <Pie
+                              data={chartData}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={100}
+                              paddingAngle={5}
+                              dataKey="value"
+                              fill="#8884d8"
+                            >
+                              {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={entry.color} />
+                              ))}
+                            </Pie>
+                            <RechartsTooltip 
+                              formatter={(value: any) => [formatCurrency(value), '']}
+                            />
+                          </PieChart>
+                        </div>
+                        
+                      </div>
+                    ) : (
+                      <div style={{ width: 250, height: 250, display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #ccc', borderRadius: 8 }}>
+                        <span style={{ color: '#999' }}>Không có dữ liệu để hiển thị</span>
+                      </div>
+                    )}
                   </div>
-                  
+
                   <div className="allocation-legend">
                     <div className="legend-item">
                       <div className="legend-label">
@@ -310,10 +378,10 @@ function Billing() {
                       </div>
                       <div className="legend-info">
                         <div className="legend-amount">
-                          {formatCurrency(assetAllocation.cashAmount)}
+                          {formatCurrency(safeParseAmount(assetAllocation.cashAmount))}
                         </div>
                         <div className="legend-percentage">
-                          {assetAllocation.cashPercentage.toFixed(1)}%
+                          {assetAllocation.cashPercentage?.toFixed(1) || '0.0'}%
                         </div>
                       </div>
                     </div>
@@ -325,10 +393,10 @@ function Billing() {
                       </div>
                       <div className="legend-info">
                         <div className="legend-amount">
-                          {formatCurrency(assetAllocation.savingsAmount)}
+                          {formatCurrency(safeParseAmount(assetAllocation.savingsAmount))}
                         </div>
                         <div className="legend-percentage">
-                          {assetAllocation.savingsPercentage.toFixed(1)}%
+                          {assetAllocation.savingsPercentage?.toFixed(1) || '0.0'}%
                         </div>
                       </div>
                     </div>
@@ -383,7 +451,7 @@ function Billing() {
                                 {account.accountNumber}
                               </span>
                               <span className={`account-status ${account.status.toLowerCase()}`}>
-                                {account.status === 'ACTIVE' ? 'Đang hoạt động' : 'Chờ xử lý'}
+                                {account.status === 'ACTIVE' ? 'Đang hoạt động' : 'Đã tất toán'}
                               </span>
                             </div>
                             
@@ -456,6 +524,30 @@ function Billing() {
                                 </span>
                               </div>
                             </div>
+
+                            {/* Action buttons */}
+                            {account.status === 'ACTIVE' && (
+                              <div className="account-actions" style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid #f0f0f0' }}>
+                                <Space>
+                                  <Button 
+                                    type="primary" 
+                                    danger 
+                                    icon={<StopOutlined />}
+                                    size="small"
+                                    onClick={(e) => {
+                                      handleEarlyClosureClick(account);
+                                    }}
+                                  >
+                                    Tất toán trước hạn
+                                  </Button>
+                                  <Tooltip title="Xem chi tiết giao dịch">
+                                    <Button size="small" icon={<HistoryOutlined />}>
+                                      Chi tiết
+                                    </Button>
+                                  </Tooltip>
+                                </Space>
+                              </div>
+                            )}
                           </Card>
                         );
                       })}
@@ -531,6 +623,14 @@ function Billing() {
           </Row>
         </div>
       </Card>
+
+      {/* Early Closure Modal */}
+      <EarlyClosureModal
+        visible={showEarlyClosureModal}
+        onCancel={handleEarlyClosureCancel}
+        onSuccess={handleEarlyClosureSuccess}
+        account={selectedAccountForClosure}
+      />
     </div>
   );
 }

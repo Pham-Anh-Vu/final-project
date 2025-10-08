@@ -19,11 +19,19 @@ import keycloak from "../../../../keycloak";
 import { useAppDispatch } from "../../../../hooks/hooks";
 import { logout } from "../../../../shared/reducers/authSlice";
 import Header from "./Header";
+import { useCurrentUser, canAccessMenuItem, MENU_PERMISSIONS } from "../../../../utils/roleUtils";
 
 function Sidenav({ color }) {
   const { pathname } = useLocation();
   const page = pathname.replace("/", "");
   const dispatch = useAppDispatch();
+  
+  // Lấy thông tin user và roles
+  const currentUser = useCurrentUser();
+  const userRoles = currentUser?.roles || [];
+  
+  // Helper function để kiểm tra quyền menu
+  const hasPermission = (menuItem: string) => canAccessMenuItem(userRoles, menuItem);
 
   const dashboard = [
     <svg
@@ -149,6 +157,46 @@ function Sidenav({ color }) {
     </svg>,
   ];
 
+  const aml = [
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      key={0}
+    >
+      <path
+        fillRule="evenodd"
+        clipRule="evenodd"
+        d="M10 2L3 6v3c0 5.5 3.8 10.74 9 12 5.2-1.26 9-6.5 9-12V6l-7-4z"
+        fill={color}
+      />
+      <path
+        d="M8 10l2 2 4-4"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>,
+  ];
+
+  const monitoring = [
+    <svg
+      width="20"
+      height="20"
+      viewBox="0 0 20 20"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      key={0}
+    >
+      <circle cx="10" cy="10" r="2.5" stroke="white" strokeWidth="1.5" fill="none"/>
+      <path d="M10 2v4.5M10 13.5v4.5M18 10h-4.5M6.5 10H2" stroke="white" strokeWidth="1.5" strokeLinecap="round"/>
+      <rect x="3" y="3" width="14" height="14" rx="2" fill={color} opacity="0.8"/>
+    </svg>,
+  ];
+
   const encryption = [
     <svg
       width="20"
@@ -214,143 +262,214 @@ function Sidenav({ color }) {
       </div>
       <hr />
       <Menu theme="light" mode="inline">
-        <Menu.Item key="1">
-          <NavLink to="/dashboard">
-            <span
-              className="icon"
-              style={{
-                background: page === "dashboard" ? color : "",
+        {/* Dashboard - Tất cả user đều thấy */}
+        {hasPermission(MENU_PERMISSIONS.DASHBOARD) && (
+          <Menu.Item key="1">
+            <NavLink to="/dashboard">
+              <span
+                className="icon"
+                style={{
+                  background: page === "dashboard" ? color : "",
+                }}
+              >
+                {dashboard}
+              </span>
+              <span className="label">Dashboard</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Khách hàng - Chỉ privileged users */}
+        {hasPermission(MENU_PERMISSIONS.CUSTOMERS) && (
+          <Menu.Item key="2">
+            <NavLink to="/customer">
+              <span
+                className="icon"
+                style={{
+                  background: page === "customer" ? color : "",
+                }}
+              >
+                {tables}
+              </span>
+              <span className="label">Khách hàng</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Billing - Tất cả user đều thấy */}
+        {hasPermission(MENU_PERMISSIONS.BILLING) && (
+          <Menu.Item key="3">
+            <NavLink to="/billing">
+              <span
+                className="icon"
+                style={{
+                  background: page === "billing" ? color : "",
+                }}
+              >
+                {billing}
+              </span>
+              <span className="label">Billing</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* RTL - Bị ẩn cho tất cả users */}
+        {hasPermission(MENU_PERMISSIONS.RTL) && (
+          <Menu.Item key="4">
+            <NavLink to="/rtl">
+              <span
+                className="icon"
+                style={{
+                  background: page === "rtl" ? color : "",
+                }}
+              >
+                {rtl}
+              </span>
+              <span className="label">RTL</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Gói lãi suất - Chỉ privileged users */}
+        {hasPermission(MENU_PERMISSIONS.INTEREST_PACKAGES) && (
+          <Menu.Item key="5">
+            <NavLink to="/deposit">
+              <span
+                className="icon"
+                style={{
+                  background: page === "deposit" ? color : "",
+                }}
+              >
+                {deposit}
+              </span>
+              <span className="label">Gói lãi suất</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Tiền gửi - Tất cả user đều thấy */}
+        {hasPermission(MENU_PERMISSIONS.DEPOSITS) && (
+          <Menu.Item key="6">
+            <NavLink to="/account-saving">
+              <span
+                className="icon"
+                style={{
+                  background: page === "account-saving" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Tiền gửi</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Tác vụ chờ duyệt - Chỉ privileged users */}
+        {hasPermission(MENU_PERMISSIONS.PENDING_TASKS) && (
+          <Menu.Item key="7">
+            <NavLink to="/sysPendingTasks">
+              <span
+                className="icon"
+                style={{
+                  background: page === "sysPendingTasks" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Tác vụ chờ duyệt</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Quản lý AML - Chỉ privileged users */}
+        {hasPermission(MENU_PERMISSIONS.AML_MANAGEMENT) && (
+          <Menu.Item key="8">
+            <NavLink to="/aml-management">
+              <span
+                className="icon"
+                style={{
+                  background: page === "aml-management" ? color : "",
+                }}
+              >
+                {aml}
+              </span>
+              <span className="label">Quản lý AML</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Quản lý giám sát - Chỉ privileged users */}
+        {hasPermission(MENU_PERMISSIONS.MONITORING_MANAGEMENT) && (
+          <Menu.Item key="9">
+            <NavLink to="/monitoring-management">
+              <span
+                className="icon"
+                style={{
+                  background: page === "monitoring-management" ? color : "",
+                }}
+              >
+                {monitoring}
+              </span>
+              <span className="label">Quản lý giám sát</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Demo Mã Hóa - Bị ẩn cho tất cả users */}
+        {hasPermission(MENU_PERMISSIONS.ENCRYPTION_DEMO) && (
+          <Menu.Item key="10">
+            <NavLink to="/encryption-demo">
+              <span
+                className="icon"
+                style={{
+                  background: page === "encryption-demo" ? color : "",
+                }}
+              >
+                {encryption}
+              </span>
+              <span className="label">🔐 Demo Mã Hóa</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Account Pages Header - Chỉ hiển thị nếu có menu items bên dưới */}
+        {(hasPermission(MENU_PERMISSIONS.PROFILE) || hasPermission(MENU_PERMISSIONS.LOGOUT)) && (
+          <Menu.Item className="menu-item-header">
+            ACCOUNT PAGES
+          </Menu.Item>
+        )}
+
+        {/* Profile - Tất cả user đều thấy */}
+        {hasPermission(MENU_PERMISSIONS.PROFILE) && (
+          <Menu.Item key="9">
+            <NavLink to="/profile">
+              <span
+                className="icon"
+                style={{
+                  background: page === "profile" ? color : "",
+                }}
+              >
+                {profile}
+              </span>
+              <span className="label">Profile</span>
+            </NavLink>
+          </Menu.Item>
+        )}
+
+        {/* Log Out - Tất cả user đều thấy */}
+        {hasPermission(MENU_PERMISSIONS.LOGOUT) && (
+          <Menu.Item key="10">
+            <NavLink
+              to="/home"
+              onClick={() => {
+                dispatch(logout());
               }}
             >
-              {dashboard}
-            </span>
-            <span className="label">Dashboard</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <NavLink to="/customer">
-            <span
-              className="icon"
-              style={{
-                background: page === "customer" ? color : "",
-              }}
-            >
-              {tables}
-            </span>
-            <span className="label">Khách hàng</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <NavLink to="/billing">
-            <span
-              className="icon"
-              style={{
-                background: page === "billing" ? color : "",
-              }}
-            >
-              {billing}
-            </span>
-            <span className="label">Billing</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="4">
-          <NavLink to="/rtl">
-            <span
-              className="icon"
-              style={{
-                background: page === "rtl" ? color : "",
-              }}
-            >
-              {rtl}
-            </span>
-            <span className="label">RTL</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item key="5">
-          <NavLink to="/deposit">
-            <span
-              className="icon"
-              style={{
-                background: page === "deposit" ? color : "",
-              }}
-            >
-              {deposit}
-            </span>
-            <span className="label">Gói lãi suất</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item >
-          <NavLink to="/account-saving">
-            <span
-              className="icon"
-              style={{
-                background: page === "profile" ? color : "",
-              }}
-            >
-              {profile}
-            </span>
-            <span className="label">Tiền gửi</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item >
-          <NavLink to="/sysPendingTasks">
-            <span
-              className="icon"
-              style={{
-                background: page === "profile" ? color : "",
-              }}
-            >
-              {profile}
-            </span>
-            <span className="label">Tác vụ chờ duyệt</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item >
-          <NavLink to="/encryption-demo">
-            <span
-              className="icon"
-              style={{
-                background: page === "encryption-demo" ? color : "",
-              }}
-            >
-              {encryption}
-            </span>
-            <span className="label">🔐 Demo Mã Hóa</span>
-          </NavLink>
-        </Menu.Item>
-        <Menu.Item className="menu-item-header">
-          Account Pages
-        </Menu.Item>
-        <Menu.Item >
-          <NavLink to="/profile">
-            <span
-              className="icon"
-              style={{
-                background: page === "profile" ? color : "",
-              }}
-            >
-              {profile}
-            </span>
-            <span className="label">Profile</span>
-          </NavLink>
-        </Menu.Item>
-        {/* <Menu.Item key="7">
-          <NavLink to="/sign-in">
-            <span className="icon">{signin}</span>
-            <span className="label">Sign In</span>
-          </NavLink>
-        </Menu.Item> */}
-        <Menu.Item>
-          <NavLink
-            to="/home"
-            onClick={() => {
-              dispatch(logout());
-            }}
-          >
-            <span className="icon">{signup}</span>
-            <span className="label">Log Out</span>
-          </NavLink>
-        </Menu.Item>
+              <span className="icon">{signup}</span>
+              <span className="label">Log Out</span>
+            </NavLink>
+          </Menu.Item>
+        )}
       </Menu>
       <div className="aside-footer">
         <div

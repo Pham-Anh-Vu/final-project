@@ -22,6 +22,8 @@ import {
   Input,
   Switch,
   Card,
+  message,
+  Alert,
 } from "antd";
 import signinbg from "../assets/images/img-signin.jpg";
 import {
@@ -34,7 +36,7 @@ import {
   BankOutlined,
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
-import { login } from "../../../../shared/reducers/authSlice";
+import { login, clearError } from "../../../../shared/reducers/authSlice";
 import "./SignIn.css";
 
 function onChange(checked) {
@@ -138,22 +140,36 @@ const SignIn = () => {
 
   const onFinish = (values: any) => {
     setLoading(true);
+    // Clear previous errors
+    dispatch(clearError());
+    
     dispatch(login({ username: values.username, password: values.password }))
       .unwrap()
       .then(() => {
         // Đăng nhập thành công
+        message.success("Đăng nhập thành công!");
         navigate("/dashboard");
       })
       .catch((error) => {
         console.error("Login failed:", error);
+        // Hiển thị thông báo lỗi
+        message.error(error || "Đăng nhập thất bại. Vui lòng thử lại!");
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
+  // Clear error when user starts typing
+  const handleInputChange = () => {
+    if (auth.error) {
+      dispatch(clearError());
+    }
+  };
+
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+    message.warning("Vui lòng kiểm tra thông tin đăng nhập!");
   };
   return (
     <>
@@ -171,6 +187,18 @@ const SignIn = () => {
                 Đăng nhập
               </Title>
             </div>
+            {/* Hiển thị lỗi đăng nhập */}
+            {auth.error && (
+              <Alert
+                message="Đăng nhập thất bại"
+                description={auth.error}
+                type="error"
+                showIcon
+                style={{ marginBottom: 16 }}
+                closable
+              />
+            )}
+            
             <Form
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
@@ -188,7 +216,10 @@ const SignIn = () => {
                   },
                 ]}
               >
-                <Input placeholder="Tên đăng nhập" />
+                <Input 
+                  placeholder="Tên đăng nhập" 
+                  onChange={handleInputChange}
+                />
               </Form.Item>
 
               <Form.Item
@@ -202,7 +233,10 @@ const SignIn = () => {
                   },
                 ]}
               >
-                <Input placeholder="Mật khẩu" />
+                <Input.Password 
+                  placeholder="Mật khẩu" 
+                  onChange={handleInputChange}
+                />
               </Form.Item>
 
               <Form.Item className="aligin-center" valuePropName="checked">

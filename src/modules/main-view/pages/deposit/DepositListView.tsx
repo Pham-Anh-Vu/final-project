@@ -42,6 +42,7 @@ import {
 import { DataDetailViewProps } from "../../../../shared/interface/DataDetailView";
 import { useCreateSysPendingTaskMutation } from "../../../../service/sys-pending-task.api";
 import { useAppSelector } from "../../../../hooks/hooks";
+import ProfessionalHeader from '../../../../components/common/ProfessionalHeader';
 import "./DepositManagement.css";
 
 const { Text, Title } = Typography;
@@ -278,6 +279,19 @@ const DepositListView: React.FC = () => {
           icon: <CheckCircleOutlined style={{ color: '#52c41a' }} />,
           duration: 4,
         });
+
+        // Create sysPendingTask for approval workflow
+        const pendingTask = {
+          entityId: result.id,
+          identifyId: result.id,
+          menuMappingName: "Lãi suất tiết kiệm",
+          classCallBack: "DepositBpm",
+          secretKey: "deposit",
+          taskAction: "C",
+          apprStatus: "N",
+        };
+
+        await createPendingTask(pendingTask);
       }
       
       setIsDetailVisible(false);
@@ -391,16 +405,14 @@ const DepositListView: React.FC = () => {
   return (
     <div>
       <Card className="deposit-management-main-card">
-        {/* Header */}
-        <div className="deposit-management-header">
-          <Title level={1}>
-            <BankOutlined style={{ marginRight: 12 }} />
-            Quản Lý Gói Lãi Suất Tiết Kiệm
-          </Title>
-          <Text>
-            Tạo và quản lý các gói lãi suất tiết kiệm với quy trình phê duyệt chuyên nghiệp
-          </Text>
-        </div>
+        {/* Professional Header */}
+        <ProfessionalHeader
+          icon={<BankOutlined />}
+          title="Quản Lý Gói Lãi Suất Tiết Kiệm"
+          subtitle="Tạo và quản lý các gói lãi suất tiết kiệm với quy trình phê duyệt chuyên nghiệp"
+          variant="secondary"
+          size="large"
+        />
 
         {/* Content */}
         <div className="deposit-management-content">

@@ -681,9 +681,27 @@
 }
 
 /* Chart Responsive */
+.chart-container {
+  position: relative;
+  overflow: visible;
+  min-height: 250px;
+}
+
 .chart-container .recharts-wrapper {
   width: 100% !important;
   height: auto !important;
+  overflow: visible !important;
+}
+
+.chart-container .recharts-surface {
+  overflow: visible !important;
+}
+
+/* Debug Chart Styles */
+.chart-container h4 {
+  margin: 8px 0 4px 0;
+  font-size: 14px;
+  color: #666;
 }
 
 @media (max-width: 768px) {

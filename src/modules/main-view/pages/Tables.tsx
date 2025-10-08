@@ -82,7 +82,7 @@ function Tables() {
   const filteredData = useMemo(() => {
     if (!searchText) return customers;
     return customers.filter((item) =>
-      [item.fullName, item.email, item.phone, item.cusCode]
+      [item.fullName, item.email, item.phone, item.cusCode, item.identityNo]
         .some((field) =>
           field?.toLowerCase().includes(searchText.toLowerCase())
         )
@@ -107,6 +107,13 @@ function Tables() {
       dataIndex: "phone",
       key: "phone",
       sorter: (a, b) => (a.phone || "").localeCompare(b.phone || ""),
+    },
+    {
+      title: "CMND/CCCD",
+      dataIndex: "identityNo",
+      key: "identityNo",
+      sorter: (a, b) => (a.identityNo || "").localeCompare(b.identityNo || ""),
+      render: (value) => value || "-",
     },
     {
       title: "Mã KH",
@@ -163,7 +170,6 @@ function Tables() {
           Tìm
         </Button>
       </Space>
-
       <Table
         loading={isLoading}
         dataSource={filteredData}
@@ -171,7 +177,8 @@ function Tables() {
         rowKey="id"
         bordered
         pagination={{ pageSize: 7 }}
-        style={{ background: "white", borderRadius: 12 }}
+        style={{ background: "white", borderRadius: 12, width: "100%" }}
+        scroll={{ x: 800 }}
       />
     </div>
   );

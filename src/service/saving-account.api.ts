@@ -6,6 +6,12 @@ interface SavingAccountRequest {
   term: number;
 }
 
+interface EarlyClosureRequest {
+  savingAccountId: number;
+  reason: string;
+  confirmed: boolean;
+}
+
 interface SavingAccountResponse {
   id: number;
   accountNumber: string;
@@ -21,6 +27,31 @@ interface SavingAccountResponse {
   approvalStatus: string;
   expectedAmount: number;
   createdAt: string;
+  message: string;
+  success: boolean;
+}
+
+interface EarlyClosureResponse {
+  savingAccountId: number;
+  accountNumber: string;
+  customerName: string;
+  originalBalance: number;
+  originalInterestRate: number;
+  originalTermMonths: number;
+  startDate: string;
+  originalMaturityDate: string;
+  closureDate: string;
+  actualTermDays: number;
+  interestEarned: number;
+  penaltyRate: number;
+  penaltyAmount: number;
+  finalAmount: number;
+  totalWithdrawal: number;
+  projectedInterestIfMatured: number;
+  lossFromEarlyClosure: number;
+  reason: string;
+  processedAt: string;
+  processedBy: string;
   message: string;
   success: boolean;
 }
@@ -49,8 +80,24 @@ export const savingAccountApi = baseAuthAPI.injectEndpoints({
         return response.data || { message: 'Có lỗi xảy ra' };
       },
     }),
+    closeSavingAccountEarly: build.mutation<EarlyClosureResponse, EarlyClosureRequest>({
+      query: (body) => ({
+        url: `${savingAccountUrl}/close-early`,
+        method: 'POST',
+        body,
+      }),
+      transformResponse: (response: ApiResponse<EarlyClosureResponse>) => {
+        return response.data;
+      },
+      transformErrorResponse: (response: any) => {
+        return response.data || { message: 'Có lỗi xảy ra' };
+      },
+    }),
   }),
 });
 
-export const { useCreateSavingAccountMutation } = savingAccountApi;
+export const { 
+  useCreateSavingAccountMutation,
+  useCloseSavingAccountEarlyMutation 
+} = savingAccountApi;
 

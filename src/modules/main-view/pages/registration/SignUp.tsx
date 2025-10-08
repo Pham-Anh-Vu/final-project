@@ -127,6 +127,7 @@ export default function SignUp() {
         firstName: values.firstName,
         lastName: values.lastName,
         phone: values.phone,
+        identityNo: values.identityNo,
         enabled: true,
         credentials: [
           {
@@ -211,53 +212,78 @@ export default function SignUp() {
                 <Form.Item
                   name="email"
                   rules={[
-                    { required: true, message: "Please input your email!" },
+                    { required: true, message: "Vui lòng nhập email!" },
+                    { type: 'email', message: 'Email không đúng định dạng!' }
                   ]}
                 >
-                  <Input placeholder="email" />
+                  <Input placeholder="Email" />
                 </Form.Item>
                 <Form.Item
                   name="firstName"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your first name!",
+                      message: "Vui lòng nhập họ!",
                     },
                   ]}
                 >
-                  <Input placeholder="First Name" />
+                  <Input placeholder="Họ" />
                 </Form.Item>
                 <Form.Item
                   name="lastName"
                   rules={[
-                    { required: true, message: "Please input your last name!" },
+                    { required: true, message: "Vui lòng nhập tên!" },
                   ]}
                 >
-                  <Input placeholder="Last Name" />
+                  <Input placeholder="Tên" />
                 </Form.Item>
                 <Form.Item
                   name="phone"
                   rules={[
                     {
                       required: true,
-                      message: "Please input your phone number!",
+                      message: "Vui lòng nhập số điện thoại!",
+                    },
+                    {
+                      pattern: /^(\+84|84|0)(3|5|7|8|9)[0-9]{8}$/,
+                      message: "Số điện thoại không đúng định dạng!",
                     },
                   ]}
                 >
-                  <Input placeholder="Phone Number" />
+                  <Input placeholder="Số điện thoại" />
+                </Form.Item>
+                <Form.Item
+                  name="identityNo"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Vui lòng nhập số CMND/CCCD!",
+                    },
+                    {
+                      pattern: /^[0-9]{9,12}$/,
+                      message: "Số CMND/CCCD phải từ 9-12 chữ số!",
+                    },
+                  ]}
+                >
+                  <Input placeholder="Số CMND/CCCD" />
                 </Form.Item>
                 <Form.Item
                   name="password"
                   rules={[
-                    { required: true, message: "Please input your password!" },
+                    { required: true, message: "Vui lòng nhập mật khẩu!" },
+                    {
+                      min: 6,
+                      message: "Mật khẩu phải có ít nhất 6 ký tự!",
+                    },
                   ]}
                 >
-                  <Input placeholder="Password" />
+                  <Input.Password placeholder="Mật khẩu" />
                 </Form.Item>
 
                 <Form.Item
+                  name="confirmPassword"
                   rules={[
-                    { required: true, message: "Please input your password!" },
+                    { required: true, message: "Vui lòng xác nhận mật khẩu!" },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
                         if (!value || getFieldValue("password") === value) {
@@ -265,21 +291,30 @@ export default function SignUp() {
                         }
                         return Promise.reject(
                           new Error(
-                            "The two passwords that you entered do not match!"
+                            "Hai mật khẩu không khớp nhau!"
                           )
                         );
                       },
                     }),
                   ]}
                 >
-                  <Input placeholder="Re Password" />
+                  <Input.Password placeholder="Nhập lại mật khẩu" />
                 </Form.Item>
 
-                <Form.Item name="remember" valuePropName="checked">
+                <Form.Item 
+                  name="remember" 
+                  valuePropName="checked"
+                  rules={[
+                    {
+                      validator: (_, value) =>
+                        value ? Promise.resolve() : Promise.reject(new Error('Bạn phải đồng ý với điều khoản và điều kiện!')),
+                    },
+                  ]}
+                >
                   <Checkbox>
-                    I agree the{" "}
+                    Tôi đồng ý với{" "}
                     <a href="#pablo" className="font-bold text-dark">
-                      Terms and Conditions
+                      điều khoản và điều kiện
                     </a>
                   </Checkbox>
                 </Form.Item>
@@ -290,14 +325,14 @@ export default function SignUp() {
                     type="primary"
                     htmlType="submit"
                   >
-                    SIGN UP
+                    ĐĂNG KÝ
                   </Button>
                 </Form.Item>
               </Form>
               <p className="font-semibold text-muted text-center">
-                Already have an account?{" "}
+                Đã có tài khoản?{" "}
                 <Link to="/sign-in" className="font-bold text-dark">
-                  Sign In
+                  Đăng nhập
                 </Link>
               </p>
             </Card>

@@ -33,6 +33,7 @@ import { useEffect, useState } from "react";
 import React from "react";
 import dayjs, { Dayjs } from "dayjs";
 import { useAppSelector } from "../../../../hooks/hooks";
+import { ProfessionalHeader } from "../../../../components/common/ProfessionalHeader";
 import "./SavingAccountPage.css";
 
 const { Title, Text } = Typography;
@@ -147,7 +148,8 @@ const CreateSavingAccountPage: React.FC = () => {
           id: payload?.customerId || payload?.sub,
           cusCode: payload?.cusCode || payload?.preferred_username,
           fullName: payload?.name || payload?.given_name,
-          email: payload?.email
+          email: payload?.email,
+          identityNo: payload?.identityNo
         });
       } catch (error) {
         console.error("Error parsing token:", error);
@@ -201,19 +203,18 @@ const CreateSavingAccountPage: React.FC = () => {
   return (
     <div>
       <Card className="savings-account-main-card">
-        {/* Header */}
-        <div className="savings-account-header">
-          <Title level={1}>
-            <SafetyOutlined style={{ marginRight: 12 }} />
-            Tạo Tài Khoản Tiết Kiệm
-          </Title>
-          <Text>
-            Gửi tiết kiệm an toàn, lãi suất cạnh tranh, cam kết bảo mật tuyệt đối
-          </Text>
+        {/* Professional Header */}
+        <ProfessionalHeader
+          icon={<SafetyOutlined />}
+          title="Tạo Tài Khoản Tiết Kiệm"
+          subtitle="Gửi tiết kiệm an toàn, lãi suất cạnh tranh, cam kết bảo mật tuyệt đối"
+          variant="success"
+          size="large"
+        >
           <div style={{ marginTop: 24 }}>
             <Steps current={currentStep} items={steps} />
           </div>
-        </div>
+        </ProfessionalHeader>
 
         {/* Content */}
         <div className="savings-account-content">
@@ -436,6 +437,10 @@ const CreateSavingAccountPage: React.FC = () => {
               <div>
                 <Text strong>Khách hàng: </Text>
                 <Text>{customerInfo?.fullName || customerInfo?.cusCode}</Text>
+              </div>
+              <div>
+                <Text strong>CMND/CCCD: </Text>
+                <Text>{customerInfo?.identityNo || '-'}</Text>
               </div>
               <div>
                 <Text strong>Gói lãi suất: </Text>

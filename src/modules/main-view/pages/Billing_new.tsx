@@ -381,7 +381,7 @@ function Billing() {
                                 {account.accountNumber}
                               </span>
                               <span className={`account-status ${account.status.toLowerCase()}`}>
-                                {account.status === 'ACTIVE' ? 'Đang hoạt động' : 'Chờ xử lý'}
+                                {account.status === 'ACTIVE' ? 'Đang hoạt động' : ( account.status === 'CLOSED' ? 'Đã tất toán' : (account.status === 'PENDING' ? 'Chờ duyệt' : 'Không xác định') )}
                               </span>
                             </div>
                             
@@ -534,6 +534,23 @@ function Billing() {
 }
 
 export default Billing;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

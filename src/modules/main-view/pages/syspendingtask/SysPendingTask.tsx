@@ -11,6 +11,8 @@ import {
 import { useGetDepositByIdQuery } from "../../../../service/deposit.api";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Table } from "antd/lib";
+import { ClockCircleOutlined } from "@ant-design/icons";
+import { ProfessionalHeader } from "../../../../components/common/ProfessionalHeader";
 import "./index.css";
 
 function SysPendingTaskListView() {
@@ -120,6 +122,7 @@ function SysPendingTaskListView() {
         .then(() => {
           message.success("Duyệt thành công");
           closeModal();
+          refetch(); // Refresh the pending tasks list
         })
         .catch((error) => {
           console.error("Error approving entity:", error);
@@ -128,6 +131,7 @@ function SysPendingTaskListView() {
     },
     visible: modalVisible,
     data: deposit,
+    taskData: dataSyspendingTask, // Pass task data for AML approval
   };
 
   const RenderScreen = () => {
@@ -166,17 +170,16 @@ function SysPendingTaskListView() {
             lg={12}
             xl={24}
             style={{ width: "100%" }}
-            className="mb-24"
           >
-            <div
-              className="wrapper"
-              style={{
-                backgroundImage:
-                  "url(" + "/images/home/header_background.png" + ")",
-              }}
-            >
-              <h2>Tác vụ chờ duyệt</h2>
-            </div>
+            <Card style={{ borderRadius: 12, overflow: 'hidden', marginBottom: 24 }}>
+              <ProfessionalHeader
+                icon={<ClockCircleOutlined />}
+                title="Tác Vụ Chờ Duyệt"
+                subtitle="Danh sách các tác vụ đang chờ phê duyệt từ quản lý"
+                variant="warning"
+                size="medium"
+              />
+            </Card>
           </Col>
 
           <Col
